@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NEET PG Tools</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Your shared styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Google font (optional, same as other page) -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap">
+</head>
+<body class="p-4">
+
+<div class="container">
+    <h2 class="mb-4 text-center">🏥 NEET PG Helper Apps</h2>
+
+    <p class="text-center mb-4 lead">
+        Powerful tools to predict your courses and find the best colleges using <strong>2025 AIQ data</strong>.
+    </p>
+
+    <div class="row justify-content-center g-4">
+        <div class="col-md-6 col-lg-5">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-chart-line fa-3x text-primary"></i>
+                    </div>
+                    <h4 class="card-title fw-bold">Course Predictor</h4>
+                    <p class="card-text">
+                        Enter your rank, quota & category to see eligible courses with exact closing ranks.
+                    </p>
+                    <a href="{{ url_for('coursepredict') }}" class="btn btn-primary btn-lg w-100">
+                        🎯 Predict My Courses
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-5">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-trophy fa-3x text-warning"></i>
+                    </div>
+                    <h4 class="card-title fw-bold">🏆 Best Colleges</h4>
+                    <p class="card-text">
+                        Find top colleges by lowest closing ranks. Filter by state and rank threshold.
+                    </p>
+                    <a href="{{ url_for('best_colleges') }}" class="btn btn-warning btn-lg w-100 text-white">
+                        🏅 Find Best Colleges
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5 justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="alert alert-info border-0 shadow-sm">
+                <h5 class="mb-2">✨ Based on Real 2025 AIQ Data</h5>
+                <p class="mb-0">
+                    Accurate predictions using actual allotment ranks from MCC counselling.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer mt-5 py-4 bg-light">
+    <div class="container text-center">
+        <small class="text-muted">
+            NEET PG Seat Helper © 2025 • Built with Flask & SQLite • 
+            <a href="#" class="link-secondary">Data Source</a>
+        </small>
+    </div>
+</footer>
+
+<!-- Bootstrap JS + Font Awesome -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</body>
+</html>
