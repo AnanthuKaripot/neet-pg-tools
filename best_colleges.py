@@ -1,7 +1,7 @@
 import sqlite3
 import pandas as pd
 
-DB_PATH = "medical_allotment.db"
+DB_PATH = "database/medical_allotment.db"
 
 def get_connection():
     return sqlite3.connect(DB_PATH)

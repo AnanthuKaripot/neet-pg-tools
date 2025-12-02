@@ -5,7 +5,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import make_pipeline
 import numpy as np
 
-DB_FILE = "rank_predictor.db"
+DB_FILE = "database/rank_predictor.db"
 
 class RankPredictor:
     def __init__(self, degree=3):

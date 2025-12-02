@@ -1,14 +1,12 @@
 from flask import Flask, render_template, request, jsonify
-import sqlite3
-from best_colleges import get_best_colleges_by_course, get_states, get_courses
+from best_colleges import get_best_colleges_by_course, get_states, get_courses as get_best_courses
 from rank_predictor import predict_rank
+import course_predictor
+
 
 app = Flask(__name__)
 
-def get_connection():
-    return sqlite3.connect("medical_allotment.db")
-
-#               ------   index page   ------ 
+#           ------   index page    ------   
 
 @app.route("/")
 def home():
@@ -18,13 +16,8 @@ def home():
 
 @app.route("/coursepredict", methods=["GET", "POST"])
 def coursepredict():
-    conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT DISTINCT course FROM allotted_seats ORDER BY course")
-    courses = [r[0] for r in cur.fetchall()]
-    cur.execute("SELECT DISTINCT allotted_category FROM allotted_seats ORDER BY allotted_category")
-    categories = [r[0] for r in cur.fetchall()]
-
+    courses = course_predictor.get_courses()
+    categories = course_predictor.get_categories()
     selected_course = None
     selected_quota = None
     selected_category = None
@@ -39,57 +32,38 @@ def coursepredict():
         my_rank_str = request.form.get("my_rank")
 
         if selected_course and selected_category and selected_quota:
-            cur.execute("""
-                        SELECT MAX(rank)
-                        FROM allotted_seats
-                        WHERE course = ? AND allotted_quota = ? AND allotted_category = ?;
-                        """, (selected_course, selected_quota, selected_category))
-            row = cur.fetchone()
-            if row and row[0] is not None:
-                last_rank = int(row[0])
+            last_rank = course_predictor.get_last_rank(selected_course, selected_quota, selected_category)
 
         if my_rank_str and selected_category and selected_quota:
-            my_rank = int(my_rank_str)
-            cur.execute("""
-                        SELECT course, allotted_quota, allotted_category, MAX(rank) AS last_rank
-                        FROM allotted_seats
-                        WHERE allotted_category = ? AND allotted_quota = ?
-                        GROUP BY course, allotted_category
-                        HAVING last_rank >= ?
-                        ORDER BY last_rank;
-                        """, (selected_category, selected_quota, my_rank))
-            eligible_courses = cur.fetchall()
-    conn.close()
+            try:
+                my_rank = int(my_rank_str)
+            except ValueError:
+                my_rank = None
+            if my_rank is not None:
+                eligible_courses = course_predictor.get_eligible_courses(my_rank, selected_quota, selected_category)
+
     return render_template("coursepredict.html",
-                courses=courses,
-                categories=categories,
-                selected_course=selected_course,
-                selected_quota=selected_quota,
-                selected_category=selected_category,
-                my_rank=my_rank,
-                last_rank=last_rank,
-                eligible_courses=eligible_courses)
+                           courses=courses,
+                           categories=categories,
+                           selected_course=selected_course,
+                           selected_quota=selected_quota,
+                           selected_category=selected_category,
+                           my_rank=my_rank,
+                           last_rank=last_rank,
+                           eligible_courses=eligible_courses)
+
 
 @app.route("/get_quotas", methods=["GET"])
 def get_quotas():
     course = request.args.get("course")
-    conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("""
-        SELECT DISTINCT allotted_quota
-        FROM allotted_seats
-        WHERE course = ?
-        ORDER BY allotted_quota;
-    """, (course,))
-    quotas = [row[0] for row in cur.fetchall()]
-    conn.close()
+    quotas = course_predictor.get_quotas(course) if course else []
     return jsonify({"quotas": quotas})
 
 #               ------   best colleges page   ------ 
 
 @app.route("/best-colleges", methods=["GET", "POST"])
 def best_colleges():
-    courses = get_courses()
+    courses = get_best_courses()
     states = get_states()
 
     if request.method == "POST":
@@ -111,8 +85,8 @@ def best_colleges():
     if course:
         df = get_best_colleges_by_course(course, state_filter=state_filter or None, top_n=top_n)
         if not df.empty:
-            table_html = df.to_html(classes="table table-striped table-hover text-center", 
-                                   index=False, escape=False, table_id="best-colleges-table")
+            table_html = df.to_html(classes="table table-striped table-hover text-center",
+                                    index=False, escape=False, table_id="best-colleges-table")
 
     return render_template("best_colleges.html",
                            table_html=table_html,
@@ -135,7 +109,7 @@ def predict_rank_route():
             # Validate score range
             if not (0 <= score <= 800):
                 raise ValueError("Score out of valid range")
-            
+
             # Convert score to percentage
             percentage = (score / 800) * 100
             predicted_rank = predict_rank(percentage)
@@ -144,5 +118,6 @@ def predict_rank_route():
 
     return render_template('predict_rank.html', predicted_rank=predicted_rank)
 
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
