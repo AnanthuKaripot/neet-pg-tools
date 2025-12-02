@@ -1,15 +1,20 @@
 from flask import Flask, render_template, request, jsonify
 import sqlite3
 from best_colleges import get_best_colleges_by_course, get_states, get_courses
+from rank_predictor import predict_rank
 
 app = Flask(__name__)
 
 def get_connection():
     return sqlite3.connect("medical_allotment.db")
 
+#               ------   index page   ------ 
+
 @app.route("/")
 def home():
     return render_template("index.html")
+
+#           ------   course predictor page    ------   
 
 @app.route("/coursepredict", methods=["GET", "POST"])
 def coursepredict():
@@ -80,6 +85,8 @@ def get_quotas():
     conn.close()
     return jsonify({"quotas": quotas})
 
+#               ------   best colleges page   ------ 
+
 @app.route("/best-colleges", methods=["GET", "POST"])
 def best_colleges():
     courses = get_courses()
@@ -116,5 +123,26 @@ def best_colleges():
                            selected_state=state_filter,
                            top_n=top_n)
 
+
+#                ------   rank predictor page    ------   
+
+@app.route('/predict-rank', methods=['GET', 'POST'])
+def predict_rank_route():
+    predicted_rank = None
+    if request.method == 'POST':
+        try:
+            score = float(request.form.get('score', -1))
+            # Validate score range
+            if not (0 <= score <= 800):
+                raise ValueError("Score out of valid range")
+            
+            # Convert score to percentage
+            percentage = (score / 800) * 100
+            predicted_rank = predict_rank(percentage)
+        except Exception:
+            predicted_rank = "Invalid input. Please enter a valid score from 0 to 800."
+
+    return render_template('predict_rank.html', predicted_rank=predicted_rank)
+
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
