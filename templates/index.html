@@ -1,101 +1,119 @@
 <!doctype html>
 <html>
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NEET PG Tools</title>
-
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-
-
-    <!-- Your shared styles -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
-
-    <!-- Google font (optional, same as other page) -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NEET PG Tools</title>
+    <!-- Tailwind CSS -->
+    <link href="{{ url_for('static', filename='dist/output.css') }}?v=darkmode" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Styles (Popup) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="p-4">
 
+<body class="selection:bg-primary-500 selection:text-white">
 
-<div class="container">
-    <h2 class="mb-4 text-center">🏥 NEET PG Helper Apps</h2>
+    <div class="container mx-auto px-4 py-12 max-w-6xl min-h-screen flex flex-col">
 
+        <!-- Hero Section -->
+        <div class="text-center mb-16 space-y-4 animate-fade-in">
+            <div
+                class="inline-block px-4 py-1.5 rounded-full bg-dark-800 border border-dark-700 text-primary-500 text-sm font-medium mb-4">
+                ✨ Updated with 2025 AIQ Data
+            </div>
+            <h1
+                class="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 leading-tight pb-2">
+                NEET PG Helper Apps
+            </h1>
+            <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                Master your counseling strategy with data-driven tools for rank prediction and college selection.
+            </p>
+        </div>
 
-    <p class="text-center mb-4 lead">
-        Powerful tools to predict your courses and find the best colleges using <strong>2025 AIQ data</strong>.
-    </p>
+        <!-- Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 items-stretch">
 
+            <!-- Course Predictor Card -->
+            <div class="card p-8 group flex flex-col h-full hover:-translate-y-2 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i class="fas fa-chart-line fa-6x text-blue-500"></i>
+                </div>
+                <div
+                    class="mb-6 w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                    <i class="fas fa-chart-line fa-2x"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 group-hover:text-blue-400 transition-colors text-left">Course
+                    Predictor</h3>
+                <p class="text-slate-400 mb-8 flex-grow">Analyze closing ranks across quotas and categories to find your
+                    best fit.</p>
+                <div class="mt-auto pt-4">
+                    <a href="{{ url_for('coursepredict') }}"
+                        class="w-full inline-flex justify-center items-center px-6 py-4 bg-dark-700 hover:bg-blue-600 text-white font-semibold rounded-xl transition-all group-hover:shadow-lg group-hover:shadow-blue-500/25">
+                        Predict My Courses <i
+                            class="fas fa-arrow-right ml-2 opacity-0 group-hover:opacity-100 transition-all transform -translate-x-2 group-hover:translate-x-0"></i>
+                    </a>
+                </div>
+            </div>
 
-    <div class="row justify-content-center g-4">
-        <div class="col-md-6 col-lg-5">
-            <div class="card h-100 shadow-sm border-0">
-                <div class="card-body text-center p-4">
-                    <div class="mb-3">
-                        <i class="fas fa-chart-line fa-3x text-primary"></i>
-                    </div>
-                    <h4 class="card-title fw-bold">Course Predictor</h4>
-                    <p class="card-text"> Enter your rank, quota & category to see eligible courses with exact closing ranks.</p>
-                    <a href="{{ url_for('coursepredict') }}" class="btn btn-primary btn-lg w-100">🎯 Predict My Courses</a>
-                </div>
-            </div>
-        </div>
+            <!-- Best Colleges Card -->
+            <div class="card p-8 group flex flex-col h-full hover:-translate-y-2 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i class="fas fa-trophy fa-6x text-amber-500"></i>
+                </div>
+                <div
+                    class="mb-6 w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-white transition-all duration-300">
+                    <i class="fas fa-trophy fa-2x"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 group-hover:text-amber-400 transition-colors text-left">Best Colleges
+                </h3>
+                <p class="text-slate-400 mb-8 flex-grow">Filter top medial colleges by state and rank preference.</p>
+                <div class="mt-auto pt-4">
+                    <a href="{{ url_for('best_colleges') }}"
+                        class="w-full inline-flex justify-center items-center px-6 py-4 bg-dark-700 hover:bg-amber-600 text-white font-semibold rounded-xl transition-all group-hover:shadow-lg group-hover:shadow-amber-500/25">
+                        Find Colleges <i
+                            class="fas fa-arrow-right ml-2 opacity-0 group-hover:opacity-100 transition-all transform -translate-x-2 group-hover:translate-x-0"></i>
+                    </a>
+                </div>
+            </div>
 
+            <!-- Rank Predictor Card -->
+            <div class="card p-8 group flex flex-col h-full hover:-translate-y-2 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i class="fas fa-percentage fa-6x text-emerald-500"></i>
+                </div>
+                <div
+                    class="mb-6 w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
+                    <i class="fas fa-percentage fa-2x"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 group-hover:text-emerald-400 transition-colors text-left">Rank
+                    Predictor</h3>
+                <p class="text-slate-400 mb-8 flex-grow">Estimate your 2025 rank based on your mock or actual scores.
+                </p>
+                <div class="mt-auto pt-4">
+                    <a href="{{ url_for('predict_rank_route') }}"
+                        class="w-full inline-flex justify-center items-center px-6 py-4 bg-dark-700 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-all group-hover:shadow-lg group-hover:shadow-emerald-500/25">
+                        Predict Rank <i
+                            class="fas fa-arrow-right ml-2 opacity-0 group-hover:opacity-100 transition-all transform -translate-x-2 group-hover:translate-x-0"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
 
-        <div class="col-md-6 col-lg-5">
-            <div class="card h-100 shadow-sm border-0">
-                <div class="card-body text-center p-4">
-                    <div class="mb-3">
-                        <i class="fas fa-trophy fa-3x text-warning"></i>
-                    </div>
-                    <h4 class="card-title fw-bold">🏆 Best Colleges</h4>
-                    <p class="card-text"> Find top colleges by lowest closing ranks. Filter by state and rank threshold.</p>
-                    <a href="{{ url_for('best_colleges') }}" class="btn btn-warning btn-lg w-100 text-white">🏅 Find Best Colleges</a>
-                </div>
-            </div>
-        </div>
+    </div>
 
-        <div class="col-md-6 col-lg-5">
-            <div class="card h-100 shadow-sm border-0">
-                <div class="card-body text-center p-4">
-                    <div class="mb-3">
-                        <i class="fas fa-percentage fa-3x text-success"></i>
-                    </div>
-                    <h4 class="card-title fw-bold">Rank Predictor</h4>
-                    <p class="card-text"> Enter your percentage score to predict your NEET PG rank for 2025.</p>
-                    <a href="{{ url_for('predict_rank_route') }}" class="btn btn-success btn-lg w-100"> 📊 Predict My Rank</a>
-                </div>
-            </div>
-        </div>
+    <footer class="border-t border-dark-800 py-8 bg-dark-900 mt-auto">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-slate-500 text-sm">
+                NEET PG Seat Helper © 2025 • Designed for Medicos
+            </p>
+        </div>
+    </footer>
 
-    </div>
-
-
-    <div class="row mt-5 justify-content-center">
-        <div class="col-md-8 text-center">
-            <div class="alert alert-info border-0 shadow-sm">
-                <h5 class="mb-2">✨ Based on Real 2025 AIQ Data</h5>
-                <p class="mb-0">Accurate predictions using actual allotment ranks from MCC counselling.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<footer class="footer mt-5 py-4 bg-light">
-    <div class="container text-center">
-        <small class="text-center">NEET PG Seat Helper © 2025• Built with Flask & SQLite •<a href="#" class="link-secondary">Data Source</a>
-        </small>
-    </div>
-</footer>
-
-
-<!-- Bootstrap JS + Font Awesome -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
+
 </html>

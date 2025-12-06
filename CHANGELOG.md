@@ -1,34 +1,32 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to the **NEET PG Tools** project will be documented in this file.
 
 ## [Unreleased]
 
-- Describe planned or ongoing changes here
-
-## [v1.1.0] - 01-12-2025
-
+## [2.0.0] - 2025-12-06
 ### Added
-- Rank Predictor using polynomial regression model
-### Changed
-- Minor html interface changes
-
-### Fixed
-- N/A
-
-## [v1.0.0] - 30-11-2025
-
-### Added
-- Project scaffolding and initial database design
-- Initial release of NEET PG Helper web app
-- Course Predictor feature with rank eligibility
-- Best Colleges Finder with filtering and scoring
-- Database setup scripts for allotment and rank prediction data
-- Responsive UI with Bootstrap 5 styling
-
+- **Dark Mode Theme**: A comprehensive dark theme using Slate-900 backgrounds and high-contrast text.
+- **Tailwind CSS Integration**: Replaced Bootstrap with Tailwind CSS for modern, utility-first styling.
+- **Responsive Design**: Improved mobile responsiveness across all pages.
+- **Versioned Assets**: Added cache-busting (?v=darkmode) to CSS links to ensure immediate updates.
 
 ### Changed
-- N/A
+- **Home Page**: Refactored with a modern grid layout and gradient typography. Buttons now align perfectly at the bottom of equal-height cards.
+- **Course Predictor**: 
+    - Updated UI to a glassmorphism card design.
+    - Improved feedback mechanism for "No courses found".
+    - Fixed data handling to correctly display Course Names instead of failing object references.
+- **Best Colleges**: 
+    - Fixed table column keys to correctly map internal API data to the view.
+    - Styled tables with dark mode compatible rows and hover effects.
+- **Rank Predictor**: Centralized the design and added visual emphasis to the result.
 
 ### Fixed
-- N/A
+- **Mobile Layout**: Fixed specific issues with horizontal scrolling on smaller screens.
+- **Browser Caching**: Resolved issue where stubborn old CSS was being loaded by the browser.
+
+## [1.0.0] - Initial Release
+- Basic Flask application structure.
+- Course Predictor, College Finder, and Rank Predictor tools.
+- Bootstrap 5 based styling.

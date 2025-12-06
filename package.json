@@ -1,0 +1,16 @@
+{
+    "name": "neet-pg-tools",
+    "version": "1.0.0",
+    "description": "NEET PG Tools",
+    "main": "index.js",
+    "scripts": {
+        "build": "tailwindcss -i ./static/src/input.css -o ./static/dist/output.css",
+        "watch": "tailwindcss -i ./static/src/input.css -o ./static/dist/output.css --watch"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "tailwindcss": "^3.4.1"
+    }
+}

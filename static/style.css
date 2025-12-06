@@ -1,93 +1,11 @@
 /* static/style.css */
 
-/* Default (desktop/tablet) stays as you have */
-body {
-    background-color: #5eb8e1;
+/* Utility for toggling visibility from JS */
+.d-none {
+    display: none !important;
 }
 
-h2, h3 {
-    text-align: center;               /* center heading */
-    font-family: 'Poppins', sans-serif;  /* new stylish font */
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-}
-
-/* Base style for all selects */
-select.form-select {
-    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
-    cursor: pointer;
-}
-
-/* Hover effect for all selects including best_colleges dropdowns */
-select.form-select:hover, select.form-select:focus {
-    border-color: #0d6efd;
-    background-color: #f0f6ff;
-    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
-    outline: none;
-}
-
-/* Style for option hover (limited by browser support, best effort) */
-select.form-select option:hover {
-    background-color: #cce4ff;
-}
-
-/* Label styling */
-.form-label {
-    font-weight: 600;
-}
-
-/* Button padding */
-.btn-primary {
-    padding-left: 2rem;
-    padding-right: 2rem;
-}
-
-/* Results section spacing */
-.results-section {
-    margin-top: 2rem;
-}
-
-/* Table styling */
-.table {
-    font-size: 0.9rem;
-    background-color: #ffffff;
-    border-radius: 6px;
-    overflow: hidden;            /* round corners for header too */
-}
-
-.table thead {
-    background-color: #0d6efd;   /* Bootstrap primary */
-    color: #ffffff;
-}
-
-.table thead th {
-    border-color: #0d6efd;
-    font-weight: 600;
-    text-align: center; /* center header text */
-}
-
-.table tbody tr:nth-child(even) {
-    background-color: #f8f9fa;   /* light stripe */
-}
-
-.table tbody tr:hover {
-    background-color: #e9f2ff;   /* subtle hover */
-}
-
-.table td, .table th {
-    padding: 0.55rem 0.75rem;
-    vertical-align: middle;
-    text-align: center; /* center content text */
-}
-
-/* Footer styling */
-.footer {
-    border-top: 1px solid #dee2e6;
-    color: #6c757d;
-    font-size: 0.8rem;
-}
-
-/* Popup overlay */
+/* Popup overlay - Retained for main.js compatibility */
 .popup-overlay {
     position: fixed;
     inset: 0;
@@ -96,66 +14,44 @@ select.form-select option:hover {
     align-items: center;
     justify-content: center;
     z-index: 1050;
-}
-
-/* Hide helper */
-.d-none {
-    display: none !important;
+    backdrop-filter: blur(2px);
 }
 
 /* Popup box */
 .popup-box {
     background: #ffffff;
     padding: 1.5rem 2rem;
-    border-radius: 8px;
+    border-radius: 12px;
     max-width: 360px;
     width: 90%;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     text-align: center;
+    animation: popup-scale 0.2s ease-out;
+}
+
+@keyframes popup-scale {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .popup-title {
     font-weight: 600;
     margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+    color: #ef4444;
+    /* Tailwind red-500 */
 }
 
 #popup-message {
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-}
-
-/* Mobile-specific adjustments */
-@media (max-width: 576px) {
-    body {
-        padding: 1rem !important;
-    }
-
-    h2, h3 {
-        font-size: 1.3rem;
-    }
-
-    .btn {
-        width: 100%;
-    }
-
-    .results-section {
-        margin-top: 1.5rem;
-    }
-
-    .table {
-        font-size: 0.8rem;
-    }
-
-    /* Make selects full width for small devices */
-    select.form-select {
-        width: 100%;
-    }
-}
-
-/* Tablet adjustments */
-@media (min-width: 577px) and (max-width: 992px) {
-    /* Ensure selects adapt nicely on larger small screens */
-    select.form-select {
-        width: 100%;
-    }
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    color: #475569;
+    /* Tailwind slate-600 */
 }

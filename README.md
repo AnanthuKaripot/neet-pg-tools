@@ -1,89 +1,81 @@
-# NEET PG Helper Web Application
+# NEET PG Tools 🏥
 
-An AI-powered web application to assist NEET PG 2025 candidates in predicting eligible courses, finding the best medical colleges, and estimating their rank based on scored marks. The app leverages real counselling and allotment data with advanced statistical models for accurate and practical guidance.
+> A data-driven suite of tools for NEET PG aspirants to predict ranks, find colleges, and analyze course eligibility.
 
----
+![Dark Mode Home Page](https://via.placeholder.com/800x400?text=NEET+PG+Tools+Dark+Mode)
 
 ## Features
 
-- **Course Predictor:** Enter your rank, quota, and category to see eligible medical courses with closing ranks.
-- **Best Colleges Finder:** Find top medical colleges filtered by state and rank thresholds with a custom scoring system.
-- **Rank Predictor:** Input your total score (out of 800) to get an estimated NEET PG rank prediction using polynomial regression.
+- **Rank Predictor**: Estimate your All India Rank based on your mock/exam score.
+- **Course Predictor**: Find which courses you are eligible for based on previous year closing ranks.
+- **Best Colleges**: Filter top medical colleges by state and course popularity.
+- **Modern UI**: Fully responsive, Dark Mode enabled interface built with Tailwind CSS.
 
----
+## Tech Stack
 
-## Technology Stack
+- **Backend**: Python, Flask, SQLite / Pandas
+- **Frontend**: HTML5, Tailwind CSS, JavaScript
+- **Data**: Scikit-learn (for rank prediction model)
 
-- **Backend:** Python, Flask web framework
-- **Database:** SQLite for fast and lightweight data management
-- **Frontend:** Bootstrap 5 for responsive and modern UI
-- **Data Processing:** Pandas, scikit-learn for data analysis and rank prediction modeling
+## Installation
 
----
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/yourusername/neet-pg-tools.git
+    cd neet-pg-tools
+    ```
 
-## Setup and Installation
+2.  **Create a virtual environment**
+    ```bash
+    python -m venv venv
+    # Windows
+    venv\Scripts\activate
+    # macOS/Linux
+    source venv/bin/activate
+    ```
 
-1. **Clone the repository**
+3.  **Install dependencies**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-2. **Create a virtual environment and install dependencies**
-
-3. **Prepare SQLite databases**
- - Run the provided Python scripts to create and populate the databases from Excel files:
-   - `create_medical_allotment_db.py` for the allotment data
-   - `create_rank_predictor_db.py` for rank prediction data
-
-4. **Run the Flask app**
-Or alternatively:
-
-5. **Open the app**
-Visit `http://localhost:5000` in your browser.
-
----
+4.  **Install Node dependencies (for Tailwind)**
+    ```bash
+    npm install
+    ```
 
 ## Usage
 
-- Navigate to the homepage to access all tools.
-- Use **Course Predictor** to find eligible medical courses.
-- Use **Best Colleges** to explore top-ranked colleges.
-- Use **Rank Predictor** to estimate your rank based on score input.
+1.  **Build CSS (if making changes)**
+    ```bash
+    npm run build
+    ```
 
----
+2.  **Run the Application**
+    ```bash
+    python app.py
+    ```
 
-## Version Control
+3.  **Access in Browser**
+    Open `http://127.0.0.1:5000`
 
-This project uses Git for version control and is hosted on GitHub. It maintains a clear commit history to track changes, improvements, and bug fixes. Contributions are managed via branches and pull requests to ensure code quality and stability.
+## Project Structure
 
-You can clone the repository using gitclone
-
-Before contributing, please create a new branch and submit a pull request with your changes. This helps in reviewing and integrating your contributions safely.
-
----
-
-## Disclaimer
-
-The predictions and recommendations provided by this tool are based on historical data and statistical models. They are estimates and may not reflect actual seat allotments or results, which depend on many factors such as exam difficulty, counselling rounds, and reservation policies. Use this tool for informational purposes only.
-
----
+```
+├── app.py                 # Main Flask Application
+├── database/              # SQLite database files
+├── static/
+│   ├── src/input.css      # Tailwind source CSS
+│   ├── dist/output.css    # Compiled CSS
+│   └── main.js           # Frontend Logic
+├── templates/             # HTML Templates
+└── tailwind.config.js     # Tailwind Configuration
+```
 
 ## Contributing
 
-Contributions are welcome! Please open issues or submit pull requests for improvements and bug fixes.
-
----
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
-
----
-
-## Contact
-
-For questions or support, please reach out to [your email or GitHub profile].
-
----
-
-*Built with ❤️ for NEET PG aspirants.*
-
-
-
+[MIT](https://choosealicense.com/licenses/mit/)

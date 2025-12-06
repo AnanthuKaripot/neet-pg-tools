@@ -85,11 +85,13 @@ def best_colleges():
     if course:
         df = get_best_colleges_by_course(course, state_filter=state_filter or None, top_n=top_n)
         if not df.empty:
-            table_html = df.to_html(classes="table table-striped table-hover text-center",
-                                    index=False, escape=False, table_id="best-colleges-table")
+            # Convert dataframe to list of dicts for Jinja iteration
+            colleges_data = df.to_dict(orient='records')
+            # If the dataframe column names have spaces, we might need to be careful in jinja or rename them here.
+            # Assuming keys are 'Allotted Institute', 'Course', 'Allotted Quota', 'Rank', etc. from previous context.
 
     return render_template("best_colleges.html",
-                           table_html=table_html,
+                           colleges=colleges_data if 'colleges_data' in locals() else [],
                            error=error,
                            courses=courses,
                            states=states,
