@@ -4,6 +4,11 @@ All notable changes to the **NEET PG Tools** project will be documented in this 
 
 ## [Unreleased]
 
+## [3.0.0] - 2025-12-07
+### Added
+- **All new timetable generator**: generate your customised timetable for neet pg preperation. No need to waste time on planning to create a new timetable.
+
+
 ## [2.0.0] - 2025-12-06
 ### Added
 - **Dark Mode Theme**: A comprehensive dark theme using Slate-900 backgrounds and high-contrast text.

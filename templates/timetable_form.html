@@ -1,0 +1,336 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NEET PG Timetable Generator</title>
+    <!-- Tailwind CSS -->
+    <link href="{{ url_for('static', filename='dist/output.css') }}?v=darkmode" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="selection:bg-primary-500 selection:text-white">
+
+    <div class="container mx-auto px-4 py-12 max-w-4xl min-h-screen">
+
+        <!-- Hero Section -->
+        <div class="text-center mb-12 space-y-4">
+            <div
+                class="inline-block px-4 py-1.5 rounded-full bg-dark-800 border border-dark-700 text-primary-500 text-sm font-medium mb-4">
+                ✨ PYQ-Weighted Smart Scheduling
+            </div>
+            <h1
+                class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 leading-tight pb-2">
+                NEET PG Timetable Generator
+            </h1>
+            <p class="text-lg text-slate-400 max-w-2xl mx-auto">
+                Create your personalized study schedule with grand tests and revision planning.
+            </p>
+        </div>
+
+        <form action="/generate-timetable" method="POST" id="timetableForm" class="space-y-6">
+
+            <!-- 1. Study Period -->
+            <div class="card p-6">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center">
+                    <i class="fas fa-calendar-alt mr-2 text-blue-400"></i>
+                    1. Study Period
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-400 text-sm font-medium mb-2">Start Date</label>
+                        <input type="date" id="from_date" name="from_date" required
+                            class="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-lg text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 text-sm font-medium mb-2">End Date</label>
+                        <input type="date" id="to_date" name="to_date" required
+                            class="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-lg text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all">
+                    </div>
+                </div>
+                <p id="date_info" class="text-blue-400 font-semibold mt-3 text-sm"></p>
+            </div>
+
+            <!-- 2. Revision Phase -->
+            <div class="card p-6" id="rev_card">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center">
+                    <i class="fas fa-sync-alt mr-2 text-emerald-400"></i>
+                    2. Revision Phase
+                </h2>
+                <p id="rev_hint" class="text-slate-500 text-sm mb-3">Please enter dates above first.</p>
+                <div class="flex items-center gap-3">
+                    <input type="number" id="revision_days" name="revision_days" min="0" disabled required
+                        placeholder="Days"
+                        class="flex-1 px-4 py-3 bg-dark-800 border border-dark-700 rounded-lg text-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all disabled:opacity-50">
+                    <span class="text-slate-400 font-medium">Days</span>
+                </div>
+            </div>
+
+            <!-- 3. Daily Hours -->
+            <div class="card p-6">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center">
+                    <i class="fas fa-clock mr-2 text-purple-400"></i>
+                    3. Daily Study Hours
+                </h2>
+                <label class="block text-slate-400 text-sm font-medium mb-3">Hours per day (6-14)</label>
+                <input type="range" id="daily_hours" name="daily_hours" min="6" max="14" value="10"
+                    class="w-full h-2 bg-dark-700 rounded-lg appearance-none cursor-pointer accent-purple-500">
+                <div class="flex justify-between items-center mt-3">
+                    <span class="text-slate-500 text-sm">6 hrs</span>
+                    <span class="text-2xl font-bold text-purple-400"><span id="target_hours_display">10</span>
+                        hrs</span>
+                    <span class="text-slate-500 text-sm">14 hrs</span>
+                </div>
+            </div>
+
+            <!-- 4. Time Slots -->
+            <div class="card p-6">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center">
+                    <i class="fas fa-th mr-2 text-amber-400"></i>
+                    4. Select Time Slots
+                </h2>
+                <p class="text-slate-400 text-sm mb-4">
+                    Select exactly <strong id="target_hours" class="text-amber-400">10</strong> slots.
+                </p>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mb-4">
+                    {% set slots = [
+                    ('04:00-05:00', '4-5 am'), ('05:00-06:00', '5-6 am'), ('06:00-07:00', '6-7 am'),
+                    ('07:00-08:00', '7-8 am'), ('08:00-09:00', '8-9 am'), ('09:00-10:00', '9-10 am'),
+                    ('10:00-11:00', '10-11 am'), ('11:00-12:00', '11-12 pm'), ('12:00-13:00', '12-1 pm'),
+                    ('13:00-14:00', '1-2 pm'), ('14:00-15:00', '2-3 pm'), ('15:00-16:00', '3-4 pm'),
+                    ('16:00-17:00', '4-5 pm'), ('17:00-18:00', '5-6 pm'), ('18:00-19:00', '6-7 pm'),
+                    ('19:00-20:00', '7-8 pm'), ('20:00-21:00', '8-9 pm'), ('21:00-22:00', '9-10 pm'),
+                    ('22:00-23:00', '10-11 pm')
+                    ] %}
+                    {% for val, label in slots %}
+                    <label
+                        class="relative cursor-pointer flex items-center gap-2 px-3 py-2 bg-dark-800 border border-dark-700 rounded-lg hover:border-amber-500/50 transition-all has-[:checked]:bg-amber-500/20 has-[:checked]:border-amber-500">
+                        <input type="checkbox" name="time_slots" value="{{val}}"
+                            class="w-4 h-4 accent-amber-500 cursor-pointer">
+                        <span class="text-sm text-slate-400 has-[:checked]:text-amber-400">{{label}}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+
+                <button type="button" id="slots_okay_btn" disabled
+                    class="w-full px-6 py-3 bg-dark-700 text-slate-400 rounded-lg font-semibold transition-all transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none enabled:hover:bg-amber-600 enabled:hover:text-white enabled:hover:-translate-y-0.5">
+                    Confirm Slots
+                </button>
+            </div>
+
+            <!-- 5. Preferences -->
+            <div class="card p-6">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center">
+                    <i class="fas fa-cog mr-2 text-cyan-400"></i>
+                    5. Preferences
+                </h2>
+
+                <div class="space-y-6">
+                    <!-- Grand Test Frequency -->
+                    <div>
+                        <label class="block text-slate-400 text-sm font-medium mb-3">Grand Test Frequency</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="grant_test_frequency" value="once_weekly" checked
+                                    class="peer sr-only">
+                                <div
+                                    class="px-4 py-3 bg-dark-800 border border-dark-700 rounded-lg text-center text-slate-400 peer-checked:bg-cyan-500/20 peer-checked:border-cyan-500 peer-checked:text-cyan-400 transition-all">
+                                    Weekly
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="grant_test_frequency" value="twice_weekly"
+                                    class="peer sr-only">
+                                <div
+                                    class="px-4 py-3 bg-dark-800 border border-dark-700 rounded-lg text-center text-slate-400 peer-checked:bg-cyan-500/20 peer-checked:border-cyan-500 peer-checked:text-cyan-400 transition-all">
+                                    Bi-Weekly
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Scheduling Method -->
+                    <div>
+                        <label class="block text-slate-400 text-sm font-medium mb-3">Scheduling Method</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="method" value="subject_completion_wise" checked
+                                    class="peer sr-only">
+                                <div
+                                    class="px-4 py-3 bg-dark-800 border border-dark-700 rounded-lg text-center text-slate-400 peer-checked:bg-cyan-500/20 peer-checked:border-cyan-500 peer-checked:text-cyan-400 transition-all">
+                                    Subject Wise
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="method" value="mixed" class="peer sr-only">
+                                <div
+                                    class="px-4 py-3 bg-dark-800 border border-dark-700 rounded-lg text-center text-slate-400 peer-checked:bg-cyan-500/20 peer-checked:border-cyan-500 peer-checked:text-cyan-400 transition-all">
+                                    Mixed (Blocks)
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="generate_btn" disabled
+                class="w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold text-lg rounded-xl shadow-lg transition-all transform hover:-translate-y-1 hover:shadow-xl active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:from-dark-700 disabled:to-dark-700 disabled:transform-none disabled:shadow-none">
+                <i class="fas fa-rocket mr-2"></i>Generate Timetable
+            </button>
+
+        </form>
+
+        <!-- Back Button -->
+        <div class="text-center mt-8">
+            <a href="/" class="text-slate-500 hover:text-slate-300 transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Home
+            </a>
+        </div>
+
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        const fromDate = document.getElementById('from_date');
+        const toDate = document.getElementById('to_date');
+        const revInput = document.getElementById('revision_days');
+        const revHint = document.getElementById('rev_hint');
+        const dailyHours = document.getElementById('daily_hours');
+        const targetHours = document.getElementById('target_hours');
+        const targetHoursDisplay = document.getElementById('target_hours_display');
+        const slotChecks = document.querySelectorAll('input[name="time_slots"]');
+        const slotOkBtn = document.getElementById('slots_okay_btn');
+        const genBtn = document.getElementById('generate_btn');
+        let slotsConfirmed = false;
+        let isDurationValid = false;
+
+        // Date Logic
+        function updateDateLogic() {
+            if (fromDate.value && toDate.value) {
+                const d1 = new Date(fromDate.value);
+                const d2 = new Date(toDate.value);
+                const diffTime = Math.abs(d2 - d1);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+                document.getElementById('date_info').innerText = "Total Duration: " + diffDays + " Days";
+
+                if (diffDays < 14) {
+                    revHint.innerHTML = "<span class='text-red-400'>Error: Minimum 14 days required.</span>";
+                    revInput.disabled = true;
+                    isDurationValid = false;
+                    alert("Total days should be more than or equal to 14");
+                    updateGenBtn();
+                    return;
+                } else {
+                    revHint.className = "text-slate-500 text-sm mb-3";
+                    isDurationValid = true;
+                }
+
+                revInput.disabled = false;
+
+                if (diffDays <= 60) {
+                    revInput.value = diffDays;
+                    revInput.setAttribute('readonly', true);
+                    revHint.innerText = "Duration <= 60 days: Full period is Revision.";
+                } else {
+                    revInput.removeAttribute('readonly');
+                    const minRev = Math.floor(diffDays / 4);
+                    const maxRev = Math.floor(diffDays / 2);
+                    revInput.min = minRev;
+                    revInput.max = maxRev;
+                    revInput.value = minRev;
+                    revHint.innerText = `Recommended Revision: ${minRev} - ${maxRev} days`;
+                }
+            }
+            updateGenBtn();
+        }
+
+        fromDate.addEventListener('change', updateDateLogic);
+        toDate.addEventListener('change', updateDateLogic);
+
+        // Hours Logic
+        dailyHours.addEventListener('input', () => {
+            targetHours.innerText = dailyHours.value;
+            targetHoursDisplay.innerText = dailyHours.value;
+            slotsConfirmed = false;
+            slotOkBtn.innerHTML = "Confirm Slots";
+            slotOkBtn.classList.remove('bg-amber-600', 'text-white');
+            slotOkBtn.classList.add('bg-dark-700', 'text-slate-400');
+            updateGenBtn();
+            validateSlots();
+        });
+
+        // Slots Logic
+        function validateSlots() {
+            const goal = parseInt(dailyHours.value);
+            let count = 0;
+            slotChecks.forEach(c => { if (c.checked) count++; });
+
+            if (count === goal) {
+                if (!slotsConfirmed) {
+                    slotOkBtn.disabled = false;
+                }
+                slotChecks.forEach(c => {
+                    if (!c.checked) c.disabled = true;
+                });
+            } else {
+                slotOkBtn.disabled = true;
+                slotsConfirmed = false;
+                slotOkBtn.innerHTML = "Confirm Slots";
+                slotOkBtn.classList.remove('bg-amber-600', 'text-white');
+                slotOkBtn.classList.add('bg-dark-700', 'text-slate-400');
+                updateGenBtn();
+
+                if (count < goal) {
+                    slotChecks.forEach(c => c.disabled = false);
+                }
+            }
+        }
+
+        slotChecks.forEach(chk => {
+            chk.addEventListener('change', () => {
+                const goal = parseInt(dailyHours.value);
+                let count = 0;
+                slotChecks.forEach(c => { if (c.checked) count++; });
+
+                if (count > goal) {
+                    chk.checked = false;
+                    alert("You cannot select more slots than Daily Hours!");
+                }
+                validateSlots();
+            });
+        });
+
+        slotOkBtn.addEventListener('click', () => {
+            const goal = parseInt(dailyHours.value);
+            let count = 0;
+            slotChecks.forEach(c => { if (c.checked) count++; });
+
+            if (count === goal) {
+                slotsConfirmed = true;
+                slotOkBtn.innerHTML = "Confirmed ✅";
+                slotOkBtn.classList.remove('bg-dark-700', 'text-slate-400');
+                slotOkBtn.classList.add('bg-amber-600', 'text-white');
+                slotOkBtn.disabled = true;
+                updateGenBtn();
+            }
+        });
+
+        function updateGenBtn() {
+            if (slotsConfirmed && fromDate.value && toDate.value && isDurationValid) {
+                genBtn.disabled = false;
+            } else {
+                genBtn.disabled = true;
+            }
+        }
+    </script>
+</body>
+
+</html>
